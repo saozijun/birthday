@@ -153,7 +153,7 @@ const store = {
 	state: {
 		// will be unpaused in init()
 		paused: true,
-		soundEnabled: false,
+		soundEnabled: true,
 		// Note that config values used for <select>s must be strings, unless manually converting values to strings
 		// at render time, and parsing on change.
 		config: {
