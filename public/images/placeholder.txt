@@ -1,0 +1,9 @@
+Place your photos here:
+- photo1.jpg: 第一次见面，你的笑容好美
+- photo2.jpg: 一起吃饭，一起看电影  
+- photo3.jpg: 那些美好的回忆
+- photo4.jpg: 你在我心中最美的样子
+- photo5.jpg: 未来的每一天，都想和你一起度过
+
+Image format: JPG, PNG
+Recommended size: 800x600 or higher
