@@ -78,7 +78,7 @@ function startLaunch() {
 
   setTimeout(() => {
     showWishPopup.value = true
-  }, 100) 
+  }, 10000) 
 }
 
 // Confirm wish button
