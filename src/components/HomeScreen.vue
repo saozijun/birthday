@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <YH ref="yhComponentRef"/>
+  <YH v-if="showYH" ref="yhComponentRef"/>
   <XK />
 </template>
 
@@ -35,6 +35,7 @@ import YH from './yh.vue'
 import XK from './xk.vue'
 
 const yhComponentRef = ref(null)
+const showYH = ref(true)
 const emit = defineEmits(['next-screen'])
 
 const countdownText = ref('')
@@ -77,7 +78,7 @@ function startLaunch() {
 
   setTimeout(() => {
     showWishPopup.value = true
-  }, 10000) 
+  }, 100) 
 }
 
 // Confirm wish button
@@ -88,6 +89,14 @@ function confirmWish() {
   }
 
   showWishPopup.value = false
+  
+  // Stop fireworks animation before transitioning
+  if (yhComponentRef.value) {
+    yhComponentRef.value.stopFireworks()
+  }
+  
+  // Hide YH component before transitioning
+  showYH.value = false
   
   // Transition to the next screen
   emit('next-screen')
@@ -100,6 +109,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(timer)
+  // Stop fireworks when component unmounts
+  if (yhComponentRef.value) {
+    yhComponentRef.value.stopFireworks()
+  }
 })
 </script>
 
@@ -115,7 +128,6 @@ onUnmounted(() => {
   overflow: hidden;
   color: white;
   text-align: center;
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
   z-index: 10;
 }
 
@@ -212,6 +224,8 @@ onUnmounted(() => {
 
 /* --- Popup Styles (Glassmorphism) --- */
 .popup-overlay {
+  width: 100vw;
+  height: 100vh;
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.3);
@@ -251,7 +265,7 @@ onUnmounted(() => {
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
   font-family: inherit;
-  resize: vertical;
+  resize: none;
   background: rgba(0, 0, 0, 0.2);
   color: #fff;
   transition: border-color 0.3s, box-shadow 0.3s;

@@ -1,5 +1,9 @@
 <template>
-  <main>
+  <main
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd"
+  >
     <ul class="slider">
       <li
         v-for="item in items"
@@ -18,76 +22,107 @@
       <div class="btn" @click="prev"></div>
       <div class="btn" @click="next"></div>
     </nav>
-    
-    <div v-if="showContinueButton" class="continue-btn" @click="goNext">Continue</div>
+
+    <div v-if="showContinueButton" class="continue-btn" @click="goNext">
+      Continue
+    </div>
   </main>
 </template>
 
 <script setup>
-// CHANGED: Removed `computed` from imports
 import { ref } from 'vue'
 
-// 原始轮播数据
+// Original carousel data
 const originItems = [
   {
     title: 'Lossless Youths',
     img: 'https://cdn.mos.cms.futurecdn.net/dP3N4qnEZ4tCTCLq59iysd.jpg',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.'
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.',
   },
   {
     title: 'Estrange Bond',
     img: 'https://i.redd.it/tc0aqpv92pn21.jpg',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.'
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.',
   },
   {
     title: 'The Gate Keeper',
     img: 'https://wharferj.files.wordpress.com/2015/11/bio_north.jpg',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.'
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.',
   },
   {
     title: 'Last Trace Of Us',
     img: 'https://images7.alphacoders.com/878/878663.jpg',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.'
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.',
   },
   {
     title: 'The Migration',
     img: 'https://da.se/app/uploads/2015/09/simon-december1994.jpg',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.'
-  }
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim.',
+  },
 ]
 
 const items = ref([...originItems])
-
 const showContinueButton = ref(false)
 
 const updateButtonState = () => {
   if (showContinueButton.value) return
 
-  if (items.value.length >= 2 && items.value[1].title === originItems[originItems.length - 1].title) {
+  if (
+    items.value.length >= 2 &&
+    items.value[1].title === originItems[originItems.length - 1].title
+  ) {
     showContinueButton.value = true
   }
 }
 
 const next = () => {
-  const first = items.value.shift() 
+  const first = items.value.shift()
   items.value.push(first)
-  updateButtonState() 
+  updateButtonState()
 }
 
 const prev = () => {
   const last = items.value.pop()
   items.value.unshift(last)
-  updateButtonState() 
+  updateButtonState()
 }
-const emit = defineEmits(['next-screen'])
 
+const emit = defineEmits(['next-screen'])
 function goNext() {
   emit('next-screen')
+}
+
+// Logic for touch/swipe controls
+const touchStartX = ref(0)
+const touchMoveX = ref(0)
+const swipeThreshold = 50 // Minimum pixels to be considered a swipe
+
+const handleTouchStart = (e) => {
+  touchStartX.value = e.touches[0].clientX
+  touchMoveX.value = 0
+}
+
+const handleTouchMove = (e) => {
+  if (touchStartX.value === 0) return
+  touchMoveX.value = e.touches[0].clientX - touchStartX.value
+}
+
+const handleTouchEnd = () => {
+  if (Math.abs(touchMoveX.value) > swipeThreshold) {
+    if (touchMoveX.value < 0) {
+      next()
+    } else {
+      prev()
+    }
+  }
+  // Reset values
+  touchStartX.value = 0
+  touchMoveX.value = 0
 }
 </script>
 
@@ -96,6 +131,7 @@ main {
   position: relative;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -152,11 +188,8 @@ main {
   font: 400 1rem 'Helvetica Neue', Helvetica, sans-serif;
   color: white;
   text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
-  /* 确保 content 在蒙版之上 */
   z-index: 2;
   display: none;
-
-  /* 增加毛玻璃效果，提升质感 */
   padding: 2rem;
   background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
@@ -180,11 +213,6 @@ main {
   margin: 1rem 0 2rem;
   font-size: 0.9rem;
   font-weight: 300;
-}
-
-.content button:hover {
-  background-color: rgba(255, 255, 255, 1);
-  color: black;
 }
 
 .nav {
@@ -236,7 +264,6 @@ main {
   transform: translateX(-2px) rotate(135deg);
 }
 
-/* NEW: Styles for the Continue button */
 .continue-btn {
   position: absolute;
   bottom: 2rem;
@@ -260,4 +287,46 @@ main {
   transform: scale(1.05);
 }
 
+/* Styles for Mobile Devices */
+@media (max-width: 768px) {
+  .item:nth-child(3),
+  .item:nth-child(4),
+  .item:nth-child(5) {
+    opacity: 0;
+    left: 50%;
+    transform: translate(-50%) scale(0.9);
+  }
+
+  .content {
+    left: 50%;
+    top: auto;
+    bottom: 25%; /* Raised slightly to avoid overlap with buttons */
+    width: 90%;
+    transform: translateX(-50%);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .content .title {
+      font-size: clamp(1.2rem, 5vw, 1.8rem);
+  }
+
+  .content .description {
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+  }
+  
+  /* --- NEW: Position nav to the bottom-left on mobile --- */
+  .nav {
+    left: 2rem;
+    transform: none;
+  }
+
+  /* --- NEW: Position continue button to the bottom-right on mobile --- */
+  .continue-btn {
+    right: 2rem;
+    left: auto;
+    transform: none;
+  }
+}
 </style>

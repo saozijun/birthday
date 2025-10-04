@@ -2,19 +2,18 @@
   <div class="min-h-screen bg-black text-white flex items-center justify-center">
     <!-- BGM Audio Elements -->
     <audio ref="bgmHome" src="/audio/home.mp3" loop></audio>
-    <audio ref="bgmCard" src="/audio/card.mp3" loop></audio>
-    <audio ref="bgmPhotos" src="/audio/photos.mp3" loop></audio>
-    <audio ref="bgmCat" src="/audio/cat.mp3" loop></audio>
-    <audio ref="bgmFinal" src="/audio/final.mp3" loop></audio>
+    <audio ref="bgmCard" src="/audio/home.mp3" loop></audio>
+    <audio ref="bgmPhotos" src="/audio/home.mp3" loop></audio>
+    <audio ref="bgmCat" src="/audio/home.mp3" loop></audio>
+    <audio ref="bgmFinal" src="/audio/home.mp3" loop></audio>
 
     <!-- Loading Screen -->
     <div v-if="loading" class="fixed inset-0 bg-black flex items-center justify-center z-50">
       <div class="text-center">
         <div class="text-4xl mb-4 animate-spin">🎂</div>
         <div class="text-2xl mb-4">
-          <span v-for="(char, i) in 'Loading...'" :key="i" 
-                class="inline-block animate-bounce" 
-                :style="{ animationDelay: i * 0.1 + 's' }">
+          <span v-for="(char, i) in 'Loading...'" :key="i" class="inline-block animate-bounce"
+            :style="{ animationDelay: i * 0.1 + 's' }">
             {{ char === ' ' ? '\u00A0' : char }}
           </span>
         </div>
@@ -23,12 +22,8 @@
     </div>
 
     <!-- Main Component -->
-    <component :is="currentComponent" 
-               @next-screen="nextScreen"
-               @previous-screen="previousScreen"
-               @continue="() => startLoading(() => nextScreen())"
-               :countdown="countdown"
-               :photos="photos" />
+    <component :is="currentComponent" @next-screen="nextScreen" @previous-screen="previousScreen"
+      @continue="() => startLoading(() => nextScreen())" :countdown="countdown" :photos="photos" />
   </div>
 </template>
 
@@ -100,7 +95,7 @@ onMounted(() => {
   const timer = setInterval(() => {
     countdown.value = getCountdown()
   }, 1000)
-  
+
   playBGM('home')
 })
 
@@ -122,6 +117,8 @@ function nextScreen() {
   const screenOrder = [SCREENS.HOME, SCREENS.CARD, SCREENS.PHOTOS, SCREENS.CAT, SCREENS.FINAL]
   const currentIndex = screenOrder.indexOf(screen.value)
   if (currentIndex < screenOrder.length - 1) {
+    // FIX: Stop all music when entering the loading state.
+    playBGM('loading')
     screen.value = SCREENS.LOADING
     setTimeout(() => {
       const nextScreenValue = screenOrder[currentIndex + 1]
@@ -135,6 +132,8 @@ function previousScreen() {
   const screenOrder = [SCREENS.HOME, SCREENS.CARD, SCREENS.PHOTOS, SCREENS.CAT, SCREENS.FINAL]
   const currentIndex = screenOrder.indexOf(screen.value)
   if (currentIndex > 0) {
+    // FIX: Stop all music when entering the loading state.
+    playBGM('loading')
     screen.value = SCREENS.LOADING
     setTimeout(() => {
       const prevScreenValue = screenOrder[currentIndex - 1]
@@ -170,16 +169,39 @@ const currentComponent = computed(() => {
 
 <style scoped>
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-10px);
+  }
+
+  60% {
+    transform: translateY(-5px);
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.animate-bounce { animation: bounce 1s infinite; }
-.animate-spin { animation: spin 2s linear infinite; }
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+.animate-spin {
+  animation: spin 2s linear infinite;
+}
 </style>

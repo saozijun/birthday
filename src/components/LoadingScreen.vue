@@ -1,26 +1,23 @@
 <template>
   <div class="loading-container-dynamic">
     <div class="balloon-background">
-      <div v-for="n in 10" :key="'balloon-'+n" class="balloon"
-           :style="{
-             left: Math.random() * 100 + 'vw',
-             width: (60 + Math.random() * 60) + 'px',
-             height: (80 + Math.random() * 80) + 'px',
-             animationDuration: (20 + Math.random() * 15) + 's',
-             animationDelay: Math.random() * 10 + 's'
-           }">
+      <div v-for="n in 10" :key="'balloon-' + n" class="balloon" :style="{
+        left: Math.random() * 100 + 'vw',
+        width: (60 + Math.random() * 60) + 'px',
+        height: (80 + Math.random() * 80) + 'px',
+        animationDuration: (20 + Math.random() * 15) + 's',
+        animationDelay: Math.random() * 10 + 's'
+      }">
       </div>
     </div>
 
     <div class="content-wrapper-dynamic">
       <div class="cake-icon">
-        🎂
+        <img src="../assets/images/dg.gif" alt="">
       </div>
 
       <div class="loading-text">
-        <span v-for="(char, i) in loadingChars" :key="i"
-              class="wave-char"
-              :style="{ animationDelay: (i * 0.1) + 's' }">
+        <span v-for="(char, i) in loadingChars" :key="i" class="wave-char" :style="{ animationDelay: (i * 0.1) + 's' }">
           {{ char === ' ' ? '\u00A0' : char }}
         </span>
       </div>
@@ -54,7 +51,8 @@ const loadingChars = loadingText.split('');
   justify-content: center;
   z-index: 50;
   overflow: hidden;
-  background: #fefcf9; /* 奶油白背景 */
+  background: #fefcf9;
+  /* 奶油白背景 */
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -67,20 +65,37 @@ const loadingChars = loadingText.split('');
 }
 
 @keyframes rise-and-sway {
-  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.6; }
-  100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.6;
+  }
+
+  90% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-100px) rotate(20deg);
+    opacity: 0;
+  }
 }
 
 .balloon {
   position: absolute;
-  bottom: -150px; /* 从屏幕外开始 */
-  border: 2px solid rgba(213, 189, 175, 0.5); /* 香槟金描边 */
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* 气球形状 */
+  bottom: -150px;
+  /* 从屏幕外开始 */
+  border: 2px solid rgba(213, 189, 175, 0.5);
+  /* 香槟金描边 */
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  /* 气球形状 */
   animation: rise-and-sway linear infinite;
   transform: rotate(-20deg);
 }
+
 .balloon::before {
   content: '';
   position: absolute;
@@ -101,24 +116,52 @@ const loadingChars = loadingText.split('');
 }
 
 @keyframes content-appear {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* --- 旋转生日蛋糕 --- */
 .cake-icon {
   font-size: 6rem;
   line-height: 1;
-  animation: spin-and-bob 5s infinite ease-in-out;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+
+}
+
+.cake-icon img {
+  display: block;
+  width: 180px;
+  margin: 0 auto;
+
 }
 
 @keyframes spin-and-bob {
-  0% { transform: rotate(0deg) translateY(0px); }
-  25% { transform: rotate(90deg) translateY(-5px); }
-  50% { transform: rotate(180deg) translateY(0px); }
-  75% { transform: rotate(270deg) translateY(5px); }
-  100% { transform: rotate(360deg) translateY(0px); }
+  0% {
+    transform: rotate(0deg) translateY(0px);
+  }
+
+  25% {
+    transform: rotate(90deg) translateY(-5px);
+  }
+
+  50% {
+    transform: rotate(180deg) translateY(0px);
+  }
+
+  75% {
+    transform: rotate(270deg) translateY(5px);
+  }
+
+  100% {
+    transform: rotate(360deg) translateY(0px);
+  }
 }
 
 /* --- 波浪加载文字 --- */
@@ -132,8 +175,15 @@ const loadingChars = loadingText.split('');
 }
 
 @keyframes wave {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 .wave-char {
@@ -161,23 +211,42 @@ const loadingChars = loadingText.split('');
 }
 
 @keyframes fill-progress {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0%); }
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
 }
 
 .progress-bar-glow {
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, #f9e79f, #f7d794, #e8b387); /* 温暖的香槟金渐变 */
+  background: linear-gradient(90deg, #f9e79f, #f7d794, #e8b387);
+  /* 温暖的香槟金渐变 */
   border-radius: 6px;
   animation: fill-progress 3s infinite ease-in-out;
 }
 
 @keyframes sparkle-move {
-  0% { left: 0%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
 }
 
 .progress-bar-sparkle {
@@ -188,5 +257,4 @@ const loadingChars = loadingText.split('');
   color: #d5bdaf;
   animation: sparkle-move 3s infinite ease-in-out;
 }
-
 </style>

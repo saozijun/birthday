@@ -1,6 +1,5 @@
 <template>
-	<!-- SVG Spritesheet -->
-	<div style="height: 0; width: 0; position: absolute; visibility: hidden;">
+	<div style="height: 0; width: 0; position: fixed; top: 0;left: 0; visibility: hidden;">
 		<svg xmlns="http://www.w3.org/2000/svg">
 			<symbol id="icon-play" viewBox="0 0 24 24">
 				<path d="M8 5v14l11-7z" />
@@ -68,6 +67,16 @@ const setAutoLaunch = (enabled) => {
 			autoLaunch: enabled 
 		} 
 	});
+};
+
+// 停止烟花动画
+const stopFireworks = () => {
+	store.setState({ paused: true });
+};
+
+// 启动烟花动画
+const startFireworks = () => {
+	store.setState({ paused: false });
 };
 
 onMounted(() => {
@@ -2080,7 +2089,9 @@ function startApp() {
 }
 
 defineExpose({
-	setAutoLaunch
+	setAutoLaunch,
+	stopFireworks,
+	startFireworks
 })
 
 </script>
