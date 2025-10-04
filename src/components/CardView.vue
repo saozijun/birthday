@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full h-screen bg-cover bg-center ov" :style="{ backgroundImage: `url(${backgroundImage})` }">
-    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+  <div class="w-full h-screen bg-cover bg-center" :style="{ backgroundImage: `url(${backgroundImage})` }">
+    <div class="absolute inset-0"></div>
     <div class="relative w-full h-full flex flex-col items-center justify-center text-white p-4">
-      <div class="text-center z-10">
+      <div class="text-center ">
         <p v-for="line in visibleLines" :key="line.id"
           class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 animate-letter-by-letter" v-html="line.html">
         </p>
@@ -18,9 +18,10 @@
           :style="balloon.style">
       </div>
 
-      <button v-if="showContinue" @click="goNext" class="continue-btn animate-fade-in">
-        Continue
-      </button>
+      <div v-if="showContinue" @click="goNext" class="continue-btn animate-fade-in">
+        <button type="button" class="btn">Continue</button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -136,21 +137,15 @@ onMounted(() => {
 });
 </script>
 
-<style>
-/* Unchanged balloon and glow animations */
-@keyframes rise-and-sway {
-  0% { transform: translateY(100vh) translateX(0); opacity: 1; }
-  25% { transform: translateY(75vh) translateX(var(--sway-amount)); }
-  50% { transform: translateY(50vh) translateX(calc(var(--sway-amount) * -1)); }
-  75% { transform: translateY(25vh) translateX(var(--sway-amount)); }
-  100% { transform: translateY(-200px) translateX(0); opacity: 0; }
-}
+<style scoped>
+
 .animate-rise-and-sway {
   animation-name: rise-and-sway;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   animation-fill-mode: backwards;
 }
+
 .glowing-element {
   position: absolute;
   background-color: #ffd700;
@@ -159,10 +154,21 @@ onMounted(() => {
   animation: glow-float linear infinite;
   pointer-events: none;
 }
+
 @keyframes glow-float {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0; }
-  20% { opacity: 0.8; }
-  100% { transform: translate(calc(var(--sway-amount, 0px) * 2), -100vh) scale(0.5) rotate(720deg); opacity: 0; }
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translate(calc(var(--sway-amount, 0px) * 2), -100vh) scale(0.5) rotate(720deg);
+    opacity: 0;
+  }
 }
 
 
@@ -172,6 +178,7 @@ onMounted(() => {
     opacity: 0;
     transform: translateY(30px) scale(0.8) skew(10deg);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1) skew(0deg);
@@ -183,45 +190,47 @@ onMounted(() => {
   0% {
     transform: translateX(-100%) skew(-20deg);
   }
+
   100% {
     transform: translateX(100%) skew(-20deg);
   }
 }
 
 .animate-letter-by-letter {
-  position: relative; /* Needed for the ::after pseudo-element */
-  color: #ffffff;
-  text-shadow:
-    0 0 10px rgba(215, 230, 255, 0.8),
-    0 0 20px rgba(123, 189, 254, 0.6);
+  position: relative;
+  /* Needed for the ::after pseudo-element */
+  color: #252525b8;
 }
 
-/* MODIFIED: Target spans inside the paragraph */
-.animate-letter-by-letter > span {
-  display: inline-block; /* Essential for transforms to work */
-  opacity: 0; /* Start hidden */
-  animation-name: letter-reveal;
-  animation-duration: 0.8s;
-  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  animation-fill-mode: forwards; /* Stay visible after animation */
+:deep(.animate-letter-by-letter > span) {
+  display: inline-block;
+  opacity: 0;
+  animation: letter-reveal 0.8s forwards;
 }
-
 
 /* Unchanged button styles */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
+
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out forwards;
 }
+
 .continue-btn {
   position: absolute;
   bottom: 2rem;
   right: 2rem;
   z-index: 5;
-  padding: 0.8rem 1.8rem;
-  background: #ffffff;
+  /* background: #ffffff; */
   color: #000000;
   font-weight: bold;
   font-size: 1rem;
@@ -238,4 +247,40 @@ onMounted(() => {
   transform: scale(1.05);
 }
 
+.btn {
+  outline: none;
+  color: #DAA06D;
+  padding: .6em;
+  padding-left: 2em;
+  padding-right: 2em;
+  border: 2px dashed #DAA06D;
+  border-radius: 15px;
+  background-color: #EADDCA;
+  box-shadow: 0 0 0 4px #EADDCA, 2px 2px 4px 2px rgba(0, 0, 0, 0.5);
+  transition: .1s ease-in-out, .4s color;
+}
+
+.btn:active {
+  transform: translateX(0.1em) translateY(0.1em);
+  box-shadow: 0 0 0 4px #EADDCA, 1.5px 1.5px 2.5px 1.5px rgba(0, 0, 0, 0.5);
+}
+@keyframes rise-and-sway {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.6;
+  }
+
+  90% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-100px) rotate(20deg);
+    opacity: 0;
+  }
+}
 </style>

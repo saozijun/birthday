@@ -1,16 +1,7 @@
 <template>
-  <main
-    @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove"
-    @touchend="handleTouchEnd"
-  >
+  <main @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
     <ul class="slider">
-      <li
-        v-for="item in items"
-        :key="item.title"
-        class="item"
-        :style="{ backgroundImage: `url(${item.img})` }"
-      >
+      <li v-for="item in items" :key="item.title" class="item" :style="{ backgroundImage: `url(${item.img})` }">
         <div class="content">
           <h2 class="title">{{ item.title }}</h2>
           <p class="description">{{ item.description }}</p>
@@ -23,9 +14,11 @@
       <div class="btn" @click="next"></div>
     </nav>
 
-    <div v-if="showContinueButton" class="continue-btn" @click="goNext">
-      Continue
+
+    <div v-if="showContinueButton" @click="goNext" class="continue-btn animate-fade-in">
+      <button type="button" class="btn2">Continue</button>
     </div>
+
   </main>
 </template>
 
@@ -201,6 +194,7 @@ main {
 .item:nth-of-type(2) .content {
   display: block;
 }
+
 .content .title {
   font-family: 'Arial Black', Gadget, sans-serif;
   font-size: clamp(1.5rem, 3vw, 2.5rem);
@@ -269,8 +263,6 @@ main {
   bottom: 2rem;
   right: 2rem;
   z-index: 5;
-  padding: 0.8rem 1.8rem;
-  background: #ffffff;
   color: #000000;
   font-weight: bold;
   font-size: 1rem;
@@ -282,13 +274,9 @@ main {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
-.continue-btn:hover {
-  background-color: #f0f0f0;
-  transform: scale(1.05);
-}
-
 /* Styles for Mobile Devices */
 @media (max-width: 768px) {
+
   .item:nth-child(3),
   .item:nth-child(4),
   .item:nth-child(5) {
@@ -300,22 +288,23 @@ main {
   .content {
     left: 50%;
     top: auto;
-    bottom: 25%; /* Raised slightly to avoid overlap with buttons */
+    bottom: 25%;
+    /* Raised slightly to avoid overlap with buttons */
     width: 90%;
     transform: translateX(-50%);
     padding: 1.5rem;
     text-align: center;
   }
-  
+
   .content .title {
-      font-size: clamp(1.2rem, 5vw, 1.8rem);
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
   }
 
   .content .description {
-      font-size: 0.8rem;
-      margin-bottom: 1rem;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
   }
-  
+
   /* --- NEW: Position nav to the bottom-left on mobile --- */
   .nav {
     left: 2rem;
@@ -328,5 +317,23 @@ main {
     left: auto;
     transform: none;
   }
+}
+
+.btn2 {
+  outline: none;
+  color: #DAA06D;
+  padding: .6em;
+  padding-left: 2em;
+  padding-right: 2em;
+  border: 2px dashed #DAA06D;
+  border-radius: 15px;
+  background-color: #EADDCA;
+  box-shadow: 0 0 0 4px #EADDCA, 2px 2px 4px 2px rgba(0, 0, 0, 0.5);
+  transition: .1s ease-in-out, .4s color;
+}
+
+.btn2:active {
+  transform: translateX(0.1em) translateY(0.1em);
+  box-shadow: 0 0 0 4px #EADDCA, 1.5px 1.5px 2.5px 1.5px rgba(0, 0, 0, 0.5);
 }
 </style>

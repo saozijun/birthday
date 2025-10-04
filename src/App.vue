@@ -204,4 +204,7 @@ const currentComponent = computed(() => {
 .animate-spin {
   animation: spin 2s linear infinite;
 }
+
+
+
 </style>

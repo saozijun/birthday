@@ -78,7 +78,7 @@ function startLaunch() {
 
   setTimeout(() => {
     showWishPopup.value = true
-  }, 100) 
+  }, 10000) 
 }
 
 // Confirm wish button
@@ -315,6 +315,15 @@ onUnmounted(() => {
   }
   to {
     text-shadow: 0 0 20px #e1a7ff, 0 0 35px #ffffff;
+  }
+}
+
+@media (max-width: 768px) {
+  .popup {
+    padding: 1.5rem;
+  }
+  .popup-title{
+    font-size: 1.2rem;
   }
 }
 </style>
